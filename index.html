@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kosmetika Chotěšov | Luxusní péče o pleť</title>
+<meta name="description" content="Kosmetické služby Chotěšov – profesionální péče o pleť, řasy a obočí. Rezervujte termín online.">
+<meta name="keywords" content="kosmetika Chotěšov, kosmetické služby Plzeň, péče o pleť, lash lifting, laminace obočí">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ivory:    #f9f5ef;
+  --cream:    #f2ebe0;
+  --warm:     #e8ddd0;
+  --blush:    #c9a98e;
+  --rose:     #a07860;
+  --deep:     #3a2820;
+  --text:     #2e1e14;
+  --muted:    #8a7060;
+  --gold:     #c4a882;
+  --gold-lt:  #ddc9a8;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Jost', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  background: var(--ivory);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  transition: opacity .3s;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--rose);
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid var(--blush);
+  transition: width .25s, height .25s, border-color .25s;
+}
+body:hover .cursor-ring { opacity: 1; }
+.cursor-ring.hover {
+  width: 52px; height: 52px;
+  border-color: var(--rose);
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9990;
+  opacity: .028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.6rem 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background .5s, backdrop-filter .5s, padding .4s;
+}
+nav.scrolled {
+  background: rgba(249,245,239,.88);
+  backdrop-filter: blur(14px);
+  padding: 1rem 4vw;
+  border-bottom: 1px solid rgba(196,168,130,.18);
+}
+.nav-brand {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  letter-spacing: .12em;
+  color: var(--deep);
+  text-decoration: none;
+  font-weight: 400;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2.8rem;
+}
+.nav-links a {
+  text-decoration: none;
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .3s;
+  font-weight: 400;
+}
+.nav-links a:hover { color: var(--rose); }
+.nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; }
+.nav-toggle span { display: block; width: 24px; height: 1px; background: var(--deep); transition: all .35s; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10vw 6vw 10vw 8vw;
+  position: relative;
+  z-index: 2;
+}
+.hero-eyebrow {
+  font-size: .65rem;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--blush);
+  font-family: var(--sans);
+  font-weight: 400;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp .9s .3s forwards;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 5.5vw, 6rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--deep);
+  letter-spacing: -.01em;
+  opacity: 0;
+  animation: fadeUp 1s .5s forwards;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--rose);
+}
+.hero-sub {
+  margin-top: 2rem;
+  font-size: .88rem;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 380px;
+  letter-spacing: .04em;
+  opacity: 0;
+  animation: fadeUp .9s .75s forwards;
+}
+.hero-ctas {
+  margin-top: 3.5rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .9s 1s forwards;
+}
+.btn-primary-luxury {
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  padding: 1rem 2.2rem;
+  background: var(--deep);
+  color: var(--ivory);
+  text-decoration: none;
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-family: var(--sans);
+  font-weight: 400;
+  transition: background .3s, color .3s;
+  border: 1px solid var(--deep);
+}
+.btn-primary-luxury:hover {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #fff;
+}
+.btn-ghost-luxury {
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  padding: 1rem 2.2rem;
+  background: transparent;
+  color: var(--deep);
+  text-decoration: none;
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-family: var(--sans);
+  font-weight: 400;
+  border: 1px solid rgba(58,40,32,.25);
+  transition: border-color .3s, color .3s;
+}
+.btn-ghost-luxury:hover { border-color: var(--rose); color: var(--rose); }
+
+.hero-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.hero-image-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: saturate(.85);
+  transform: scale(1.06);
+  animation: zoomOut 1.8s .2s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(249,245,239,.35) 0%, transparent 50%);
+}
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  opacity: 0;
+  animation: fadeIn 1s 1.8s forwards;
+}
+.hero-scroll-indicator span {
+  font-size: .58rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--blush), transparent);
+  animation: lineGrow 1.5s 2s ease-out infinite;
+}
+
+/* ── DIVIDER ── */
+.ornament-divider {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--gold);
+  font-size: 1.2rem;
+  letter-spacing: .5em;
+  opacity: .6;
+}
+
+/* ── SECTION BASE ── */
+section { padding: 8rem 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 5vw; }
+.section-label {
+  font-size: .62rem;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  color: var(--blush);
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--deep);
+}
+.section-title em { font-style: italic; color: var(--rose); }
+
+/* ── SERVICES ── */
+#sluzby { background: var(--cream); }
+.services-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 5rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.service-card {
+  background: var(--ivory);
+  padding: 3rem 2.4rem;
+  position: relative;
+  overflow: hidden;
+  transition: background .4s;
+  cursor: none;
+}
+.service-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--rose);
+  transition: width .5s cubic-bezier(.25,.46,.45,.94);
+}
+.service-card:hover { background: #fff; }
+.service-card:hover::after { width: 100%; }
+.service-num {
+  font-family: var(--serif);
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: var(--gold-lt);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.service-card h3 {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: var(--deep);
+  margin-bottom: 1rem;
+}
+.service-card p {
+  font-size: .83rem;
+  line-height: 1.85;
+  color: var(--muted);
+  letter-spacing: .02em;
+}
+.services-cta {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+/* ── ABOUT ── */
+#omne { background: var(--ivory); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8vw;
+  align-items: center;
+}
+.about-image-wrap {
+  position: relative;
+}
+.about-image-frame {
+  position: absolute;
+  top: -1.5rem; left: -1.5rem;
+  right: 1.5rem; bottom: 1.5rem;
+  border: 1px solid rgba(196,168,130,.4);
+  pointer-events: none;
+}
+.about-image-wrap img {
+  width: 100%; height: 580px;
+  object-fit: cover;
+  filter: saturate(.82);
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.about-tag {
+  position: absolute;
+  bottom: -1.5rem; right: -1.5rem;
+  background: var(--deep);
+  color: var(--gold-lt);
+  padding: 1.4rem 2rem;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 300;
+  z-index: 2;
+}
+.about-text { padding-left: 1rem; }
+.about-text p {
+  font-size: .9rem;
+  line-height: 1.95;
+  color: var(--muted);
+  margin-top: 1.8rem;
+  letter-spacing: .025em;
+}
+.about-signature {
+  margin-top: 2.5rem;
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  font-style: italic;
+  color: var(--rose);
+  font-weight: 300;
+}
+
+/* ── FEATURES STRIP ── */
+.features-strip {
+  background: var(--deep);
+  padding: 4rem 0;
+  overflow: hidden;
+}
+.features-inner {
+  display: flex;
+  gap: 0;
+}
+.feature-item {
+  flex: 1;
+  text-align: center;
+  padding: 2rem 2rem;
+  border-right: 1px solid rgba(196,168,130,.15);
+  position: relative;
+}
+.feature-item:last-child { border-right: none; }
+.feature-icon {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  display: block;
+  color: var(--gold);
+}
+.feature-item h4 {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--gold-lt);
+  margin-bottom: .5rem;
+}
+.feature-item p {
+  font-size: .72rem;
+  letter-spacing: .08em;
+  color: rgba(196,168,130,.55);
+  text-transform: uppercase;
+}
+
+/* ── CONTACT ── */
+#kontakt { background: var(--cream); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 6vw;
+  align-items: start;
+}
+.contact-info-block { padding-top: 1rem; }
+.contact-detail {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.contact-line {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+.contact-line-label {
+  font-size: .6rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--blush);
+  font-weight: 400;
+}
+.contact-line-val {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--deep);
+  text-decoration: none;
+  transition: color .3s;
+}
+a.contact-line-val:hover { color: var(--rose); }
+.contact-cta { margin-top: 3rem; }
+.map-wrap {
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 24px 24px 0 var(--warm);
+  position: relative;
+}
+.map-wrap iframe {
+  display: block;
+  width: 100%;
+  height: 400px;
+  border: none;
+  filter: saturate(.7) contrast(.9);
+}
+
+/* ── INSTAGRAM ── */
+.instagram-section {
+  background: var(--ivory);
+  padding: 7rem 0;
+  text-align: center;
+}
+.instagram-section .section-title { margin-bottom: 1rem; }
+.insta-sub {
+  font-size: .78rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--blush);
+  margin-bottom: 3.5rem;
+  display: block;
+}
+.insta-frame-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 20px 20px 0 var(--warm);
+  overflow: hidden;
+}
+.insta-frame-wrap iframe {
+  display: block;
+  width: 100%;
+  height: 480px;
+  border: none;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--deep);
+  color: rgba(196,168,130,.5);
+  padding: 3rem 5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-brand {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--gold-lt);
+  font-weight: 300;
+}
+.footer-meta {
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes zoomOut {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+@keyframes lineGrow {
+  0%   { transform: scaleY(0) translateY(-100%); opacity: 1; }
+  100% { transform: scaleY(1) translateY(0); opacity: 0; }
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity .9s cubic-bezier(.25,.46,.45,.94), transform .9s cubic-bezier(.25,.46,.45,.94);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .15s; }
+.reveal-delay-2 { transition-delay: .3s; }
+.reveal-delay-3 { transition-delay: .45s; }
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-text { padding: 10rem 8vw 4rem; }
+  .hero-image-wrap { height: 50vw; }
+  .services-grid { grid-template-columns: 1fr; gap: 2px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-image-wrap img { height: 320px; }
+  .about-tag { right: 0; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .features-inner { flex-wrap: wrap; }
+  .feature-item { flex: 0 0 50%; border-bottom: 1px solid rgba(196,168,130,.15); }
+  nav .nav-links { display: none; }
+  nav .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    background: var(--ivory);
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    z-index: 999;
+  }
+  nav .nav-links.open a { font-size: 1.2rem; letter-spacing: .2em; }
+  .nav-toggle { display: flex; z-index: 1001; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-brand" href="#">Kosmetika Chotěšov</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sluzby">Služby</a></li>
+    <li><a href="#omne">O mně</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="hero-eyebrow">Kosmetický salon · Chotěšov</span>
+    <h1>Péče, která<br><em>probudí</em><br>vaši krásu</h1>
+    <p class="hero-sub">Profesionální kosmetické ošetření s individuálním přístupem. Vaše pleť si zaslouží to nejlepší.</p>
+    <div class="hero-ctas">
+      <a href="#kontakt" class="btn-primary-luxury">Rezervovat termín</a>
+      <a href="#sluzby" class="btn-ghost-luxury">Nabídka služeb</a>
+    </div>
+  </div>
+  <div class="hero-image-wrap">
+    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&q=85" alt="Luxusní kosmetické ošetření">
+    <div class="hero-image-overlay"></div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ORNAMENT -->
+<div class="ornament-divider">— ✦ —</div>
+
+<!-- SERVICES -->
+<section id="sluzby">
+  <div class="container">
+    <div class="services-header reveal">
+      <div>
+        <span class="section-label">Nabídka ošetření</span>
+        <h2 class="section-title">Naše <em>služby</em></h2>
+      </div>
+      <a href="sluzby.html" class="btn-ghost-luxury">Všechna ošetření</a>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-num">01</span>
+        <h3>Hloubkové čištění</h3>
+        <p>Kompletní ošetření pro zdravou, zářivou pleť. Důkladné čištění pórů, hydratace a regenerace — vše přizpůsobeno vašemu typu pleti.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <span class="service-num">02</span>
+        <h3>Laminace obočí</h3>
+        <p>Perfektní tvar a přirozený vzhled obočí. Efekt trvá až 6 týdnů bez každodenního tvarování — obočí vypadá plné a upravené.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <span class="service-num">03</span>
+        <h3>Lash lifting</h3>
+        <p>Zvýraznění řas bez nutnosti umělých doplňků. Přirozený lifting a zatočení vlastních řas pro pohled plný výrazu.</p>
+      </div>
+    </div>
+    <div class="services-cta reveal">
+      <a href="sluzby.html" class="btn-primary-luxury">Zobrazit celý ceník</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <div class="container">
+    <div class="features-inner">
+      <div class="feature-item reveal">
+        <span class="feature-icon">✦</span>
+        <h4>Certifikovaná péče</h4>
+        <p>Odborné vzdělání</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-1">
+        <span class="feature-icon">✦</span>
+        <h4>Prémiové přípravky</h4>
+        <p>Ověřené značky</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-2">
+        <span class="feature-icon">✦</span>
+        <h4>Individuální přístup</h4>
+        <p>Pro každou pleť</p>
+      </div>
+      <div class="feature-item reveal reveal-delay-3">
+        <span class="feature-icon">✦</span>
+        <h4>Relaxační prostředí</h4>
+        <p>Klid a pohoda</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="omne">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-wrap reveal">
+        <div class="about-image-frame"></div>
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&q=85" alt="Karol — kosmetička Chotěšov">
+        <div class="about-tag">Vaše Karol ❤</div>
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <span class="section-label">O mně</span>
+        <h2 class="section-title">Péče s<br><em>vášní</em></h2>
+        <p>Jsem certifikovaná kosmetička s individuálním přístupem ke každé klientce. Zakládám si na kvalitě, komfortu a viditelných výsledcích — protože věřím, že krásná pleť dodá sebevědomí na celý den.</p>
+        <p>Nevíte si rady? Neváhejte se na mě s čímkoliv obrátit, ráda Vám odpovím na jakékoliv dotazy.</p>
+        <div class="about-signature">Karol</div>
+        <div style="margin-top:2.5rem">
+          <a href="#kontakt" class="btn-primary-luxury">Domluvit konzultaci</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info-block reveal">
+        <span class="section-label">Spojte se</span>
+        <h2 class="section-title">Kontakt<br>& <em>rezervace</em></h2>
+        <div class="contact-detail">
+          <div class="contact-line">
+            <span class="contact-line-label">Adresa</span>
+            <span class="contact-line-val">Chotěšov, Plzeň-jih</span>
+          </div>
+          <div class="contact-line">
+            <span class="contact-line-label">Telefon</span>
+            <a href="tel:123456789" class="contact-line-val">123 456 789</a>
+          </div>
+          <div class="contact-line">
+            <span class="contact-line-label">E-mail</span>
+            <a href="mailto:info@kosmetikachotesov.cz" class="contact-line-val">info@kosmetikachotesov.cz</a>
+          </div>
+        </div>
+        <div class="contact-cta">
+          <a href="tel:123456789" class="btn-primary-luxury">Zavolat nyní</a>
+        </div>
+      </div>
+      <div class="map-wrap reveal reveal-delay-1">
+        <iframe
+          src="https://www.google.com/maps?q=Chotěšov+Plzeň+jih&output=embed"
+          loading="lazy"
+          title="Mapa salonu">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="instagram-section">
+  <div class="container">
+    <span class="section-label" style="display:block;text-align:center">Sledujte nás</span>
+    <h2 class="section-title reveal" style="margin-bottom:.5rem">Instagram</h2>
+    <span class="insta-sub">@kv_kosmetickestudio</span>
+    <div class="insta-frame-wrap reveal">
+      <iframe
+        src="https://www.instagram.com/kv_kosmetickestudio/embed"
+        loading="lazy"
+        title="Instagram feed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Kosmetika Chotěšov</div>
+  <div class="footer-meta">
+    <div>Kosmetické služby · Chotěšov · Plzeň-jih</div>
+    <div style="margin-top:.4rem">© 2026 · Veškerá práva vyhrazena</div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  dot.style.left  = e.clientX + 'px';
+  dot.style.top   = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px';
+  ring.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .service-card').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+// Navbar scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Mobile nav
+const toggle = document.getElementById('navToggle');
+const links  = document.getElementById('navLinks');
+toggle.addEventListener('click', () => {
+  links.classList.toggle('open');
+  const spans = toggle.querySelectorAll('span');
+  const open = links.classList.contains('open');
+  spans[0].style.transform = open ? 'rotate(45deg) translate(4px,4px)' : '';
+  spans[1].style.opacity   = open ? '0' : '1';
+  spans[2].style.transform = open ? 'rotate(-45deg) translate(4px,-4px)' : '';
+});
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open');
+  toggle.querySelectorAll('span').forEach(s => { s.style.transform=''; s.style.opacity=''; });
+}));
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
